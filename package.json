@@ -1,6 +1,6 @@
 {
   "name": "ynab-mcp",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A secure, self-hosted YNAB MCP server for Claude and ChatGPT, running on Cloudflare Workers.",
   "license": "MIT",
   "private": true,

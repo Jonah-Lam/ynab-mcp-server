@@ -29,9 +29,12 @@ describe("isRedirectAllowed", () => {
     expect(isRedirectAllowed(uri, DEFAULT_HOSTS)).toBe(expected);
   });
 
-  test("wildcard allows any https or loopback but never javascript:", () => {
+  test("wildcard allows any https, loopback, or reverse-domain app scheme", () => {
     expect(isRedirectAllowed("https://anything.example/cb", "*")).toBe(true);
-    expect(isRedirectAllowed("javascript:alert(1)", "*")).toBe(false);
+    expect(isRedirectAllowed("com.example.app:/oauth/callback", "*")).toBe(true);
+    for (const bad of ["javascript:alert(1)", "data:text/html,x", "vbscript:msgbox(1)", "file:///etc/passwd", "http://evil.example/cb"]) {
+      expect(isRedirectAllowed(bad, "*")).toBe(false);
+    }
   });
 
   test("unset or empty setting falls back to the defaults", () => {

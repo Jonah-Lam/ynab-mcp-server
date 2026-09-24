@@ -2,6 +2,13 @@
 
 All notable changes to this project are documented here. Versions follow [Semantic Versioning](https://semver.org).
 
+## [1.0.2] - 2026-09-24
+
+### Security
+
+- With `ALLOWED_REDIRECT_HOSTS="*"`, custom redirect schemes must now be reverse-domain app schemes (e.g. `com.example.app:`). Previously `vbscript:` and `file:` were not rejected. The default configuration was not affected.
+- Generated owner passwords now use unbiased random sampling.
+
 ## [1.0.1] - 2026-09-24
 
 ### Changed
@@ -28,5 +35,6 @@ First release.
 - `bun run setup`, `rotate-password` and `set-ynab-token` helper scripts, and Deploy to Cloudflare support.
 - Plain HTTP requests redirect to HTTPS.
 
+[1.0.2]: https://github.com/Jonah-Lam/ynab-mcp-server/releases/tag/v1.0.2
 [1.0.1]: https://github.com/Jonah-Lam/ynab-mcp-server/releases/tag/v1.0.1
 [1.0.0]: https://github.com/Jonah-Lam/ynab-mcp-server/releases/tag/v1.0.0

@@ -83,8 +83,10 @@ export function isRedirectAllowed(redirectUri: string, allowed: string[] | "*"):
   const host = url.hostname.toLowerCase().replace(/^\[|\]$/g, "");
   const loopback = host === "localhost" || host === "127.0.0.1" || host === "::1";
   if (url.protocol !== "https:" && !(url.protocol === "http:" && loopback)) {
-    // Custom schemes (e.g. native apps) are only allowed when everything is allowed.
-    return allowed === "*" && url.protocol !== "javascript:" && url.protocol !== "data:";
+    // Native-app schemes are only allowed when everything is allowed, and only in the
+    // reverse-domain form RFC 8252 requires (e.g. "com.example.app:"). This excludes
+    // javascript:, data:, vbscript:, file: and similar.
+    return allowed === "*" && /^[a-z][a-z0-9+-]*(\.[a-z0-9+-]+)+:$/.test(url.protocol);
   }
   if (allowed === "*") return true;
   return allowed.some((entry) => host === entry || host.endsWith(`.${entry}`));

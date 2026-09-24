@@ -62,8 +62,15 @@ function ask(question: string, fallback = ""): string {
 function generatePassword(): string {
   // 24 chars from an unambiguous alphabet ≈ 138 bits of entropy.
   const alphabet = "abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-  const bytes = crypto.getRandomValues(new Uint8Array(24));
-  const chars = [...bytes].map((b) => alphabet[b % alphabet.length]);
+  // Rejection sampling: only bytes below the largest multiple of the alphabet size are
+  // used, so every character is equally likely.
+  const limit = 256 - (256 % alphabet.length);
+  const chars: string[] = [];
+  while (chars.length < 24) {
+    for (const b of crypto.getRandomValues(new Uint8Array(32))) {
+      if (b < limit && chars.length < 24) chars.push(alphabet[b % alphabet.length]!);
+    }
+  }
   return `${chars.slice(0, 8).join("")}-${chars.slice(8, 16).join("")}-${chars.slice(16).join("")}`;
 }
 
