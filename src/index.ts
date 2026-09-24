@@ -105,7 +105,13 @@ function canonicalOrigin(env: Env, request?: Request): string {
 }
 
 export default {
-  fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
+  async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
+    const url = new URL(request.url);
+    // OAuth resources must be HTTPS (plain http is only allowed on loopback for `wrangler dev`).
+    if (url.protocol === "http:" && !["localhost", "127.0.0.1", "[::1]"].includes(url.hostname)) {
+      url.protocol = "https:";
+      return Response.redirect(url.toString(), 301);
+    }
     return getProvider(canonicalOrigin(env, request)).fetch(request, env, ctx);
   },
   async scheduled(_controller: ScheduledController, env: Env): Promise<void> {
