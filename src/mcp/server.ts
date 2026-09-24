@@ -1,4 +1,5 @@
 import { McpServer } from "@modelcontextprotocol/server";
+import pkg from "../../package.json";
 import { type FetchFn, YnabClient } from "../ynab/client";
 import type { ToolContext } from "./common";
 import { registerReadTools } from "./read-tools";
@@ -6,7 +7,7 @@ import { registerSearchTools } from "./search-tools";
 import { registerWriteTools } from "./write-tools";
 
 export const SERVER_NAME = "ynab-mcp";
-export const SERVER_VERSION = "1.0.0";
+export const SERVER_VERSION = pkg.version;
 
 const INSTRUCTIONS = `Tools for the user's YNAB (You Need A Budget) data.
 - All amounts are in the plan's currency units (not milliunits). Negative = outflow/spending, positive = inflow.

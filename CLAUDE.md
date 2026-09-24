@@ -12,3 +12,6 @@ Conventions:
 - Read tools go in `src/mcp/read-tools.ts` with `READ_ONLY` annotations. Anything that changes data goes in `src/mcp/write-tools.ts`, which is only registered for read/write grants.
 - YNAB API reference: https://api.ynab.com/papi/open_api_spec.yaml (uses "plans", formerly "budgets").
 - Don't import `cloudflare:workers` in modules that tests import; pass `env` explicitly.
+
+Releasing:
+- Bump `version` in `package.json` (the server reports it from there), add a `CHANGELOG.md` entry, commit, then tag `vX.Y.Z` and create a GitHub release with the changelog section as notes.
