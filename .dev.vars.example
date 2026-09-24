@@ -1,0 +1,4 @@
+# Secrets for local development (`bun run dev`). Copy to .dev.vars and fill in.
+# In production, set them with `bun run setup` or `bunx wrangler secret put <NAME>`.
+YNAB_ACCESS_TOKEN=
+OWNER_PASSWORD=
