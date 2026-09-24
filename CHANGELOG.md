@@ -2,6 +2,17 @@
 
 All notable changes to this project are documented here. Versions follow [Semantic Versioning](https://semver.org).
 
+## [1.0.1] - 2026-09-24
+
+### Changed
+
+- Settings are now managed in the Cloudflare dashboard and kept across deploys (`keep_vars`). Defaults moved from `wrangler.jsonc` into the code, so updating no longer resets settings or causes merge conflicts in `wrangler.jsonc`.
+- An unset or empty `ALLOWED_REDIRECT_HOSTS` now means the default list (Claude, ChatGPT, localhost).
+
+### Added
+
+- README section on updating a deployment.
+
 ## [1.0.0] - 2026-09-24
 
 First release.
@@ -17,4 +28,5 @@ First release.
 - `bun run setup`, `rotate-password` and `set-ynab-token` helper scripts, and Deploy to Cloudflare support.
 - Plain HTTP requests redirect to HTTPS.
 
+[1.0.1]: https://github.com/Jonah-Lam/ynab-mcp-server/releases/tag/v1.0.1
 [1.0.0]: https://github.com/Jonah-Lam/ynab-mcp-server/releases/tag/v1.0.0

@@ -56,8 +56,11 @@ export function escapeHtml(value: string): string {
     .replace(/'/g, "&#39;");
 }
 
+/** Used when ALLOWED_REDIRECT_HOSTS is unset: Claude, ChatGPT and local tools (Claude Code, MCP Inspector). */
+export const DEFAULT_REDIRECT_HOSTS = "claude.ai,claude.com,chatgpt.com,chat.openai.com,localhost,127.0.0.1";
+
 export function parseAllowedHosts(value: string | undefined): string[] | "*" {
-  const raw = (value ?? "").trim();
+  const raw = (value ?? "").trim() || DEFAULT_REDIRECT_HOSTS;
   if (raw === "*") return "*";
   return raw
     .split(",")

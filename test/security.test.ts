@@ -34,6 +34,13 @@ describe("isRedirectAllowed", () => {
     expect(isRedirectAllowed("javascript:alert(1)", "*")).toBe(false);
   });
 
+  test("unset or empty setting falls back to the defaults", () => {
+    for (const value of [undefined, "", "  "]) {
+      expect(isRedirectAllowed("https://claude.ai/api/mcp/auth_callback", parseAllowedHosts(value))).toBe(true);
+      expect(isRedirectAllowed("https://evil.example/cb", parseAllowedHosts(value))).toBe(false);
+    }
+  });
+
   test("subdomains of allowed hosts are allowed", () => {
     expect(isRedirectAllowed("https://www.claude.ai/cb", DEFAULT_HOSTS)).toBe(true);
   });

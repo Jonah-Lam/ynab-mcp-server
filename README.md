@@ -78,6 +78,30 @@ Then run `/mcp` in Claude Code to sign in.
 
 When the login page opens, check that the app name and the "Sends you back to" address are what you expect, enter your owner password, and choose whether to **allow changes**.
 
+## Updating
+
+New versions are listed on the [releases page](https://github.com/Jonah-Lam/ynab-mcp-server/releases). To be notified, click **Watch → Custom → Releases** on this repository. Updating keeps your secrets, settings and connected apps; nobody has to sign in again.
+
+**If you cloned the repository** (setup options A and C):
+
+```bash
+git pull
+bun install
+bun run deploy
+```
+
+**If you used the Deploy button**, Cloudflare created a copy of this repository in your GitHub account and deploys it on every push. Pull the new version into your copy once from a local clone of it:
+
+```bash
+git remote add upstream https://github.com/Jonah-Lam/ynab-mcp-server.git   # first time only
+git pull upstream main
+git push
+```
+
+The push deploys automatically.
+
+If an update causes problems, roll back with `bunx wrangler rollback`, or pick an earlier version in the Cloudflare dashboard under your Worker's **Deployments**.
+
 ## Tools
 
 All amounts are in your plan's currency (e.g. `-42.50`), not YNAB milliunits. Negative means money going out. Every tool takes an optional `plan_id` and defaults to your last-used plan.
@@ -112,7 +136,7 @@ Tools carry MCP annotations (`readOnlyHint`, `destructiveHint`), so Claude and C
 
 ## Configuration
 
-Set these in `wrangler.jsonc` under `vars`, or in the Cloudflare dashboard under your Worker's **Settings → Variables**.
+Set these in the Cloudflare dashboard under your Worker's **Settings → Variables and Secrets**, as plain-text variables. Deploys never overwrite them, so updating the server keeps your settings. Leave a variable unset to use its default.
 
 | Variable | Default | Purpose |
 | --- | --- | --- |

@@ -26,15 +26,14 @@
   // Daily cleanup of expired OAuth grants and tokens.
   "triggers": { "crons": ["17 4 * * *"] },
 
-  "vars": {
-    // Set to "true" to expose only read-only tools, regardless of what is granted at login.
-    "YNAB_READ_ONLY": "false",
-    // Plan (budget) used when a tool call does not name one. "last-used" or a plan ID.
-    "YNAB_DEFAULT_PLAN_ID": "last-used",
-    // Comma-separated hostnames that OAuth clients may redirect to after login.
-    // Defaults cover Claude, ChatGPT and local tools (Claude Code, MCP Inspector). Use "*" to allow any.
-    "ALLOWED_REDIRECT_HOSTS": "claude.ai,claude.com,chatgpt.com,chat.openai.com,localhost,127.0.0.1"
-  }
+  // Settings live in the Cloudflare dashboard (Worker → Settings → Variables and Secrets),
+  // and deploys leave them untouched. Unset means the default:
+  //   YNAB_READ_ONLY          "false"   "true" exposes only read-only tools
+  //   YNAB_DEFAULT_PLAN_ID    "last-used"   plan used when a tool call names none
+  //   ALLOWED_REDIRECT_HOSTS  "claude.ai,claude.com,chatgpt.com,chat.openai.com,localhost,127.0.0.1"
+  //                           hosts OAuth clients may redirect to after login; "*" allows any
+  //   PUBLIC_URL              request origin; set for a custom domain
+  "keep_vars": true
 
   // Secrets (set with `bunx wrangler secret put <NAME>` or `bun run setup`):
   //   YNAB_ACCESS_TOKEN  YNAB personal access token
