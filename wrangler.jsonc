@@ -1,0 +1,42 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "ynab-mcp",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-09-01",
+  // nodejs_compat: required by the MCP SDK.
+  // global_fetch_strictly_public: SSRF protection, required for OAuth Client ID Metadata Documents.
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "workers_dev": true,
+  "observability": { "enabled": true },
+
+  // Stores OAuth clients, grants and (hashed) tokens. Wrangler creates the
+  // namespace automatically on first deploy, so no ID is needed here.
+  "kv_namespaces": [{ "binding": "OAUTH_KV" }],
+
+  // Per-IP limit on password attempts at the authorization page.
+  // namespace_id only needs to be unique within your Cloudflare account.
+  "ratelimits": [
+    {
+      "name": "LOGIN_LIMITER",
+      "namespace_id": "7301",
+      "simple": { "limit": 5, "period": 60 }
+    }
+  ],
+
+  // Daily cleanup of expired OAuth grants and tokens.
+  "triggers": { "crons": ["17 4 * * *"] },
+
+  "vars": {
+    // Set to "true" to expose only read-only tools, regardless of what is granted at login.
+    "YNAB_READ_ONLY": "false",
+    // Plan (budget) used when a tool call does not name one. "last-used" or a plan ID.
+    "YNAB_DEFAULT_PLAN_ID": "last-used",
+    // Comma-separated hostnames that OAuth clients may redirect to after login.
+    // Defaults cover Claude, ChatGPT and local tools (Claude Code, MCP Inspector). Use "*" to allow any.
+    "ALLOWED_REDIRECT_HOSTS": "claude.ai,claude.com,chatgpt.com,chat.openai.com,localhost,127.0.0.1"
+  }
+
+  // Secrets (set with `bunx wrangler secret put <NAME>` or `bun run setup`):
+  //   YNAB_ACCESS_TOKEN  YNAB personal access token
+  //   OWNER_PASSWORD     Password you type when connecting a client (min 16 chars)
+}

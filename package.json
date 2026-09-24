@@ -1,0 +1,43 @@
+{
+  "name": "ynab-mcp",
+  "version": "1.0.0",
+  "description": "A secure, self-hosted YNAB MCP server for Claude and ChatGPT, running on Cloudflare Workers.",
+  "license": "MIT",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "setup": "bun scripts/setup.ts setup",
+    "rotate-password": "bun scripts/setup.ts rotate-password",
+    "set-ynab-token": "bun scripts/setup.ts set-ynab-token",
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "test": "bun test",
+    "typecheck": "tsc -p .",
+    "check": "tsc -p . && bun test && wrangler deploy --dry-run --outdir .wrangler/dry-run"
+  },
+  "dependencies": {
+    "@cloudflare/workers-oauth-provider": "1.0.0",
+    "@modelcontextprotocol/server": "2.0.0",
+    "agents": "0.24.0",
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^5.20260924.1",
+    "@types/bun": "^1.4.2",
+    "typescript": "^7.0.2",
+    "wrangler": "^4.138.0"
+  },
+  "cloudflare": {
+    "bindings": {
+      "YNAB_ACCESS_TOKEN": {
+        "description": "Your YNAB personal access token. Create one at https://app.ynab.com/settings/developer"
+      },
+      "OWNER_PASSWORD": {
+        "description": "A password of at least 16 characters. You type it on the login page when connecting Claude or ChatGPT. Use a password manager to generate it."
+      },
+      "OAUTH_KV": {
+        "description": "Stores OAuth clients and hashed tokens."
+      }
+    }
+  }
+}
